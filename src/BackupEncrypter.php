@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Backup;
 
-use Tavaan\Core\Contracts\Encryption\EncrypterInterface;
+use Tavaan\Engine\Crypt\Contracts\EncrypterInterface;
 use Tavaan\Engine\Backup\Exceptions\BackupException;
 
 /**

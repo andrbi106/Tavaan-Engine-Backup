@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Backup;
 
-use Tavaan\Core\Contracts\Database\ConnectionInterface;
+use Tavaan\Engine\Database\Contracts\ConnectionInterface;
 
 /**
  * تَوان | Tavaan — Backup
