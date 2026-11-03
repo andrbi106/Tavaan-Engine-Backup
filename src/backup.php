@@ -17,7 +17,7 @@ final class BackupManager
 {
     private array $backups = [];
 
-    public function __construct(private readonly array $config = [])
+    public function __construct(private array $config = [])
     {
         $this->config['backup_dir'] ??= 'storage/backups';
     }
@@ -64,24 +64,47 @@ final class BackupServiceProvider
     public function provides(): array { return [BackupManager::class, Backup::class]; }
     public function getManager(): BackupManager { if ($this->manager === null) $this->register(); return $this->manager; }
 
-    public function database()
+    public function database(string $name = 'default'): Backup
     {
-        return null;
+        $dumpPath = $this->getManager()->create('db_' . $name, 'database')->path;
+        // For an actual dump, you would shell out to pg_dump / mysqldump here.
+        // We write a placeholder dump and register the Backup.
+        return new Backup('db_' . $name, $dumpPath, 0, new \DateTimeImmutable(), 'database');
     }
-    public function files()
+    public function files(string $dir = null): array
     {
-        return $this->files ?? [];
+        $target = $dir ?? ($this->config['backup_dir'] ?? 'storage/backups');
+        if (!is_dir($target)) { return []; }
+        $all = [];
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($target));
+        foreach ($iterator as $file) {
+            if ($file->isFile()) { $all[] = $file->getPathname(); }
+        }
+        return $all;
     }
-    public function prune()
+    public function prune(int $keepDays = 7): int
     {
-        return null;
+        $manager = $this->getManager();
+        $deleted = 0;
+        $cutoff = new \DateTimeImmutable("-{$keepDays} days");
+        foreach ($manager->list() as $backup) {
+            if ($backup->createdAt < $cutoff) {
+                $manager->delete($backup->path);
+                $deleted++;
+            }
+        }
+        return $deleted;
     }
-    public function run()
+    public function run(string $name = 'full'): Backup
     {
-        return null;
+        return $this->getManager()->create($name, $name);
     }
-    public function verify()
+    public function verify(string $path): bool
     {
-        return null;
+        if (!file_exists($path)) { return false; }
+        $content = @file_get_contents($path);
+        if ($content === false) { return false; }
+        $data = json_decode($content, true);
+        return is_array($data) && isset($data['name'], $data['timestamp']);
     }
 }
