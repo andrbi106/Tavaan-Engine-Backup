@@ -7,18 +7,18 @@ namespace Tavaan\Engine\Backup\Console;
 use Tavaan\Core\Contracts\Console\CommandInterface;
 
 /**
- * backup:prune command.
+ * backup:restore command.
  */
-final class Backup_pruneCommand implements CommandInterface
+final class BackupRestoreCommand implements CommandInterface
 {
     public function name(): string
     {
-        return 'backup:prune';
+        return 'backup:restore';
     }
 
     public function description(): string
     {
-        return 'Run backup:prune (TODO: fill description).';
+        return 'Run backup:restore (TODO: fill description).';
     }
 
     public function handle(array $args = []): int

@@ -7,18 +7,18 @@ namespace Tavaan\Engine\Backup\Console;
 use Tavaan\Core\Contracts\Console\CommandInterface;
 
 /**
- * backup:run command.
+ * backup:verify command.
  */
-final class Backup_runCommand implements CommandInterface
+final class BackupVerifyCommand implements CommandInterface
 {
     public function name(): string
     {
-        return 'backup:run';
+        return 'backup:verify';
     }
 
     public function description(): string
     {
-        return 'Run backup:run (TODO: fill description).';
+        return 'Run backup:verify (TODO: fill description).';
     }
 
     public function handle(array $args = []): int
