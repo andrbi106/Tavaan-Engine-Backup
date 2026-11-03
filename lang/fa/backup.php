@@ -1,2 +1,2 @@
 <?php
-return return ['error_backup' => 'خطا در پشتیبان‌گیری.'];;
+return ['error_backup' => 'خطا در پشتیبان‌گیری.'];
