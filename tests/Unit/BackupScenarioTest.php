@@ -14,4 +14,33 @@ use Tavaan\Engine\Backup\Backup;
  * Generated from ROADMAP.md scenarios — real implementations, not placeholders.
  */
 final class BackupScenarioTest extends TestCase
-{'    public function t01_create_backup(): void\n    {\n        // Scenario T-01\n$mgr = new BackupManager(["backup_dir" => "/tmp/test_backup"]);\n        @mkdir("/tmp/test_backup", 0775, true);\n        $b = $mgr->create("test", "full");\n        $this->assertInstanceOf(Backup::class, $b);\n        $this->assertSame("test", $b->name);\n        $this->assertFileExists($b->path);\n    }\n    public function t02_list_backups(): void\n    {\n        // Scenario T-02\n$mgr = new BackupManager(["backup_dir" => "/tmp/test_backup2"]);\n        @mkdir("/tmp/test_backup2", 0775, true);\n        $mgr->create("a", "full");\n        $mgr->create("b", "full");\n        $this->assertCount(2, $mgr->list());\n    }\n    public function t03_delete_backup(): void\n    {\n        // Scenario T-03\n$mgr = new BackupManager(["backup_dir" => "/tmp/test_backup3"]);\n        @mkdir("/tmp/test_backup3", 0775, true);\n        $b = $mgr->create("d", "full");\n        $this->assertTrue($mgr->delete($b->path));\n        $this->assertFalse(file_exists($b->path));\n    }'}
+{
+    public function t01_create_backup(): void
+    {
+        // Scenario T-01
+$mgr = new BackupManager(["backup_dir" => "/tmp/test_backup"]);
+        @mkdir("/tmp/test_backup", 0775, true);
+        $b = $mgr->create("test", "full");
+        $this->assertInstanceOf(Backup::class, $b);
+        $this->assertSame("test", $b->name);
+        $this->assertFileExists($b->path);
+    }
+    public function t02_list_backups(): void
+    {
+        // Scenario T-02
+$mgr = new BackupManager(["backup_dir" => "/tmp/test_backup2"]);
+        @mkdir("/tmp/test_backup2", 0775, true);
+        $mgr->create("a", "full");
+        $mgr->create("b", "full");
+        $this->assertCount(2, $mgr->list());
+    }
+    public function t03_delete_backup(): void
+    {
+        // Scenario T-03
+$mgr = new BackupManager(["backup_dir" => "/tmp/test_backup3"]);
+        @mkdir("/tmp/test_backup3", 0775, true);
+        $b = $mgr->create("d", "full");
+        $this->assertTrue($mgr->delete($b->path));
+        $this->assertFalse(file_exists($b->path));
+    }
+}
