@@ -15,7 +15,7 @@ use Tavaan\Engine\Backup\Backup;
  */
 final class BackupScenarioTest extends TestCase
 {
-    public function t01_create_backup(): void
+    public function test_t01_create_backup(): void
     {
         // Scenario T-01
 $mgr = new BackupManager(["backup_dir" => "/tmp/test_backup"]);
@@ -25,7 +25,7 @@ $mgr = new BackupManager(["backup_dir" => "/tmp/test_backup"]);
         $this->assertSame("test", $b->name);
         $this->assertFileExists($b->path);
     }
-    public function t02_list_backups(): void
+    public function test_t02_list_backups(): void
     {
         // Scenario T-02
 $mgr = new BackupManager(["backup_dir" => "/tmp/test_backup2"]);
@@ -34,7 +34,7 @@ $mgr = new BackupManager(["backup_dir" => "/tmp/test_backup2"]);
         $mgr->create("b", "full");
         $this->assertCount(2, $mgr->list());
     }
-    public function t03_delete_backup(): void
+    public function test_t03_delete_backup(): void
     {
         // Scenario T-03
 $mgr = new BackupManager(["backup_dir" => "/tmp/test_backup3"]);
