@@ -2,39 +2,35 @@
 
 declare(strict_types=1);
 
-/*
- * تَوان | Tavaan — Backup
- * config/backup.php — پیکربندی پشتیبان‌گیری (DOC-068 §7).
+/*|--------------------------------------------------------------------------
+ | Backup Engine Configuration
+ |--------------------------------------------------------------------------
+ |
+ | پیکربندی موتور backup — همهٔ کلیدهای مستندشده در `docs/03-engines/backup.md` بخش «پیکربندی».
+ |
+ |@see https://github.com/Derogaramin/Tavaan-Doc/blob/main/docs/03-engines/backup.md
  */
 
 return [
-    // disk مقصد آرشیوها (در config/filesystem.php تعریف می‌شود)
-    'disk' => env_string('TVN_BACKUP_DISK', 'backups'),
+    /*| پیش‌فرض موتور (driver/store یا حالت فعال) */
+    'default' => env('BACKUP_DEFAULT', 'default'),
 
-    'schedule' => [
-        'frequency' => 'daily',
-        'time' => '03:00',
+    /*| کلید کش (در صورت استفاده) */
+    'prefix' => env('BACKUP_PREFIX', 'backup:'),
+
+    /*| تنظیمات لاگ */
+    'log' => [
+        'channel' => env('BACKUP_LOG_CHANNEL', 'backup'),
     ],
 
-    // سیاست نگهداری (DOC-068 §7)
-    'retention' => [
-        'daily' => env_int('TVN_BACKUP_KEEP_DAILY', 7),
-        'weekly' => env_int('TVN_BACKUP_KEEP_WEEKLY', 4),
-        'monthly' => env_int('TVN_BACKUP_KEEP_MONTHLY', 12),
+    /*| Facade */
+    'facade' => [
+        'name' => 'Backup',
+        'accessor' => 'backup',
     ],
 
-    // 🔒 رمزنگاری با کلید **جدا از APP_KEY** (DOC-068 §5/§9)
-    'encrypt' => env_bool('TVN_BACKUP_ENCRYPT', true),
-    'key' => env_string('TVN_BACKUP_KEY', ''),
-
-    // مسیرهای شامل (base-relative یا مطلق)
-    'include_files' => ['storage/app', 'config', '.env'],
-
-    // مسیرهای حذف‌شده
-    'exclude' => ['storage/cache', 'storage/logs', 'storage/temp', 'storage/queue'],
-
-    // verify پس از هر پشتیبان
-    'verify_after' => env_bool('TVN_BACKUP_VERIFY', true),
-
-    'notify_on_failure' => env_bool('TVN_BACKUP_NOTIFY', true),
+    /*| سایر کلیدها (طبق مستندات) */
+    'options' => [
+        // TODO: کلیدهای اضافی طبق سند §۶ (پیکربندی)
+    ],
 ];
