@@ -63,4 +63,25 @@ final class BackupServiceProvider
     public function boot(): void {}
     public function provides(): array { return [BackupManager::class, Backup::class]; }
     public function getManager(): BackupManager { if ($this->manager === null) $this->register(); return $this->manager; }
+
+    public function database(/* ... */): mixed
+    {
+        return null;
+    }
+    public function files(/* ... */): mixed
+    {
+        return null;
+    }
+    public function prune(/* ... */): mixed
+    {
+        return null;
+    }
+    public function run(/* ... */): mixed
+    {
+        return null;
+    }
+    public function verify(/* ... */): mixed
+    {
+        return null;
+    }
 }
