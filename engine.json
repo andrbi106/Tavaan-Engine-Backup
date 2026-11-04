@@ -11,7 +11,7 @@
     }
   },
   "providers": [
-    "Tavaan\\Engine\\Backup\\BackupManagerServiceProvider"
+    "Tavaan\\Engine\\Backup\\BackupServiceProvider"
   ],
   "requires": {
     "php": ">=8.2",
