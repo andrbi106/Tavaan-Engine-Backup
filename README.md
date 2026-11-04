@@ -2,6 +2,8 @@
 
 > **پشتیبان‌گیری** — موتور Backup در فریمورک تَوان
 
+این موتور از کلاس پایهٔ `Engine` (در [Tavaan-Engine-Core](https://github.com/andrbi106/Tavaan-Engine-Core)) ارث می‌برد.
+
 ## مشخصات
 
 | فیلد | مقدار |
@@ -11,52 +13,52 @@
 | عنوان فارسی | پشتیبان‌گیری |
 | نسخه | `0.1.0` |
 | namespace | `Tavaan\Engine\Backup` |
-| نوع | `engine` |
-| Facade | `Backup` (accessor: `backup`) |
+| کلاس موتور | `Tavaan\Engine\Backup\BackupEngine` |
+| Facade | Backup (`backup`) |
+
+## کلاس موتور
+
+```php
+namespace Tavaan\Engine\Backup;
+
+use Tavaan\EngineCore\Engine as BaseEngine;
+use Tavaan\EngineCore\Contracts\EngineManifestInterface;
+
+final class BackupEngine extends BaseEngine
+{
+    public function __construct(EngineManifestInterface $manifest)
+    {
+        parent::__construct($manifest);
+    }
+
+    public function register(ContainerInterface $container): void
+    {
+        parent::register($container);
+        // bindingهای اختصاصی موتور
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+    }
+}
+```
+
+**فایل:** `src/BackupEngine.php`
 
 ## توضیحات
 
 M5 — DB dump خالص (بدون mysqldump، chunked با cursor → حافظهٔ ثابت)، ZIP خالص (ZipWriterPure + ZipReader خودنوشته)، 🔒 رمزنگاری AES-256-GCM با کلید جدا از APP_KEY، verify (hash+decrypt)، restore با --force + maintenance mode، retention/prune.
 
-## خطاها (Exceptions)
+## وابستگی‌ها
 
-- `Tavaan\Engine\Backup\Exceptions\BackupException`
+**موتورهای مورد‌نیاز:** `config`, `filesystem`
 
-## Facadeها
-
-- `Tavaan\Engine\Backup\Facades\Backup`
-
-## کلاس‌های اصلی
-
-- `src/BackupEncrypter.php`
-- `src/Console/BackupListCommand.php`
-- `src/Console/BackupPruneCommand.php`
-- `src/Console/BackupRestoreCommand.php`
-- `src/Console/BackupRunCommand.php`
-- `src/Console/BackupVerifyCommand.php`
-- `src/DatabaseDumper.php`
-- `src/DatabaseRestorer.php`
-- `src/Manifest.php`
-- `src/ZipReader.php`
-- `src/backup.php`
+**موتورهای اختیاری:** `database`, `crypt`, `cache`, `compat`
 
 ## Service Providerها
 
 - `Tavaan\Engine\Backup\BackupManagerServiceProvider`
-
-## وابستگی‌ها
-
-**موتورهای مورد‌نیاز:**
-
-- `config`
-- `filesystem`
-
-**موتورهای اختیاری:**
-
-- `database`
-- `crypt`
-- `cache`
-- `compat`
 
 ## دستورات CLI
 
@@ -66,28 +68,19 @@ M5 — DB dump خالص (بدون mysqldump، chunked با cursor → حافظه
 - `backup:restore`
 - `backup:prune`
 
-## پیکربندی
+## سه درگاه ارتباط با سایر موتورها
 
-- فایل پیکربندی: `config/backup.php`
-- کلید: `backup`
+| درگاه | الگو | متدهای convenience |
+|---|---|---|
+| Container | pull-based DI | `make()`, `bound()` |
+| Events | pub/sub | `dispatch()`, `listen()` |
+| EngineBus | point-to-point RPC | `call()`, `offer()` |
 
 ## نصب
 
 ```bash
 git clone https://github.com/andrbi106/Tavaan-Engine-Backup.git
 ```
-
-این موتور بخشی از فریمورک تَوان است و معمولاً به‌صورت مستقیم نصب نمی‌شود،
-بلکه توسط [Tavaan-Core](https://github.com/andrbi106/Tavaan-Core) مدیریت می‌شود.
-
-## روابط با سایر مخازن
-
-| مخزن | نقش |
-|---|---|
-| **`andrbi106/Tavaan-Engine-Backup`** (این مخزن) | موتور Backup |
-| `andrbi106/Tavaan-Engine-Core` | ساختار پایه + درگاه ارتباط موتورها |
-| `andrbi106/Tavaan-Core` | اسکلت اپلیکیشن + همهٔ موتورها |
-| `Derogaramin/Tavaan-Framework` | فریمورک مادر (monorepo) |
 
 ## مجوز
 
